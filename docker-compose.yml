@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mysql_db:
+    image: mysql:latest
+    hostname: mysql_db
+    container_name: mysql_db
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: db_test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: testpw
+      version: '3'
+    networks:
+        - shared-net    
+  backend:
+    image:  "oscarygutierrezg/test-ionix-backend"
+    ports:
+      - "8082:8082"
+    links:
+      - mysql_db
+    depends_on:
+      - "mysql_db"
+    networks:
+      - shared-net       
+networks:
+  shared-net:
+    driver: bridge
